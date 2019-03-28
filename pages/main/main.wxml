@@ -15,10 +15,12 @@
 <view class='bottom_text'>
   <view class='text_head'>
     <view>小区名称</view>
-    <view>{{title}}</view>
+    <view wx:if="{{title == ''}}">请选择小区</view>
+    <view wx:else>【{{title}}】</view>
   </view>
   <view class='text_head'>
     <view>房价</view>
-    <view>{{money}}</view>
+    <view wx:if="{{money == 0}}">请选择小区</view>
+    <view wx:else>【{{money}}元/㎡】</view>
   </view>
 </view>

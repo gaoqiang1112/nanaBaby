@@ -12,8 +12,8 @@ Page({
   data: {
     latitude: 45.76021,
     longitude: 126.66837,
-    title:'loading',
-    money:'未查到',
+    title:'',
+    money:0,
     markers: [],
     // polyline: [{
     //   points: [{
@@ -120,13 +120,14 @@ Page({
         return;
       }
     })
-    console.info(name)
+    that.setData({ //设置markers属性，将搜索结果显示在地图中
+      title: name
+    })
     fangjiatongDB.where({'name':name}).get({
       success(res){
         console.info(res)
         that.setData({ //设置markers属性，将搜索结果显示在地图中
           money: res.data[0].money,
-          // title:res.data[0].title
         })
       }
     })
