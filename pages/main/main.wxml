@@ -1,0 +1,24 @@
+<map
+  id="map"
+  longitude="{{longitude}}"
+  latitude="{{latitude}}"
+  markers="{{markers}}"
+  bindregionchange="regionchange"
+  scale="14"
+  show-location
+  style="width: 100%; height: 400px;"
+  bindmarkertap='markertap'
+  data-id="{{markers}}"
+>
+<cover-image class="cover-image"  bindtap="my_location" src="/img/tt.png" />
+</map>
+<view class='bottom_text'>
+  <view class='text_head'>
+    <view>小区名称</view>
+    <view>{{title}}</view>
+  </view>
+  <view class='text_head'>
+    <view>房价</view>
+    <view>{{money}}</view>
+  </view>
+</view>
