@@ -1,4 +1,5 @@
 var QQMapWX = require('../../utils/qqmap-wx-jssdk.js');
+//sdfsf
 var qqmapsdk;
 wx.cloud.init({
   env: 'fangjiatong-e6814a'
