@@ -6,7 +6,7 @@
   bindregionchange="regionchange"
   scale="14"
   show-location
-  style="width: 100%; height: 400px;"
+  style="width: 100%; height: 300px;"
   bindmarkertap='markertap'
   data-id="{{markers}}"
 >
@@ -15,12 +15,30 @@
 <view class='bottom_text'>
   <view class='text_head'>
     <view>小区名称</view>
-    <view wx:if="{{title == ''}}">请选择小区</view>
+    <view wx:if="{{title == ''}}">【请选择小区】</view>
     <view wx:else>【{{title}}】</view>
   </view>
   <view class='text_head'>
     <view>房价</view>
-    <view wx:if="{{money == 0}}">请选择小区</view>
-    <view wx:else>【{{money}}元/㎡】</view>
+    <view>【{{money}}】</view>
   </view>
+  <view class="top bootom-btn" style=''>
+    <view class="inputView">
+        <input type="text" placeholder="请输入小区名" value="{{xiaoQuName}}" placeholder-class="ph" bindinput="xiaoQuNameInput"/>
+    </view>
+    <button  type="primary" bindtap="beginFind"  loading="{{loading}}" disabled="{{disabled}}">查询</button>
+  </view>
+  <view class="daybtns" >
+    离和娜娜见面还有 
+    <button type="{{btnType=='days'?'primary':'default'}}" size='mini' data-btnType='days' bindtap="goday">天</button>
+    <button type="{{btnType=='hours'?'primary':'default'}}" size='mini' data-btnType='hours' bindtap="goday">时</button>
+    <button type="{{btnType=='minutes'?'primary':'default'}}" size='mini' data-btnType='minutes' bindtap="goday">分</button>
+    <button type="{{btnType=='seconds'?'primary':'default'}}" size='mini' data-btnType='seconds' bindtap="goday">秒</button>
+  </view>
+  <view class='bottomtext' >
+    
+    <view> {{showVal}} </view>
+  </view>
+
+  
 </view>

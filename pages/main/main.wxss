@@ -7,9 +7,41 @@
   height:30px;
 }
 .bottom_text{
-  margin-top: 30px
+  margin-top: 20px
 }
 .text_head{
   display: flex;
   justify-content: space-around
+}
+.top{
+    margin-top:10px;
+}
+.inputView{
+    border: 2rpx solid gainsboro;
+    border-radius: 40rpx;
+    height: 80rpx;
+}
+input{
+    margin-left: 25rpx;
+    margin-right: 25rpx;
+    height: 80rpx;
+}
+.ph{
+    color: gainsboro;
+    font-size: 0.875em;
+}
+.bootom-btn{
+  display:flex;algin-item:center;margin-top:10px
+}
+.bottomtext{
+  margin-top: 10px;
+  padding: 0 15px;
+  height: 44px;
+  line-height: 44px;
+}
+.daybtns{
+  padding: 0 15px;
+  display: flex;
+  justify-content: flex-start;
+  margin-top:10px
 }

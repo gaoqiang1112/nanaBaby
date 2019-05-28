@@ -10,34 +10,17 @@ const fangjiatongDB = db.collection('name_money')
 
 Page({
   data: {
-    latitude: 45.76021,
-    longitude: 126.66837,
+    latitude: '',
+    longitude: '',
     title:'',
-    money:0,
+    loading:false,
+    disabled:false,
+    xiaoQuName:'',
+    money:'请选择小区',
     markers: [],
-    // polyline: [{
-    //   points: [{
-    //     longitude: 113.3245211,
-    //     latitude: 23.10229
-    //   }, {
-    //     longitude: 113.324520,
-    //     latitude: 23.21229
-    //   }],
-    //   color: '#FF0000DD',
-    //   width: 2,
-    //   dottedLine: true
-    // }],
-    // controls: [{
-    //   id: 1,
-    //   iconPath: '/resources/location.png',
-    //   position: {
-    //     left: 0,
-    //     top: 300 - 50,
-    //     width: 50,
-    //     height: 50
-    //   },
-    //   clickable: true
-    // }]
+    btnType:'days',
+    showVal:'',
+    myTimer:null
   },
   onReady: function () {
     // 实例化API核心类
@@ -45,6 +28,20 @@ Page({
       key: 'I26BZ-CKIK4-PU7UI-XH2BC-HQTXE-5RFNQ' // 必填
     });
     this.getLocation()
+    this.startTimer('days')
+  },
+  startTimer(t){
+    var that = this;
+    // 时间倒计时
+    var timer = setInterval(function () {
+      that.leftTimer(t,2019, 5, 1, 9, 30, 0)
+    }, 1000);
+    that.setData({
+      myTimer: timer
+    })
+  },
+  stopTimer(){
+    clearInterval(this.data.myTimer);
   },
   regionchange(e) {
     e.type == 'end' ? this.getLngLat() : '';
@@ -68,9 +65,6 @@ Page({
           longitude: res.longitude,
         })
         that.getPlaceInfo(res.longitude, res.latitude)
-        // that.latitude = res.latitude
-        // that.longitude = res.longitude
-        console.log(res)
       }
     })
   },
@@ -83,7 +77,6 @@ Page({
       page_size:10,
       location: latitude + ',' + longitude,  //设置周边搜索中心点
       success: function (res) { //搜索成功后的回调
-      console.info(res)
         var mks = []
         for (var i = 0; i < res.data.length; i++) {
           mks.push({ // 获取返回结果，放到mks数组中
@@ -102,12 +95,6 @@ Page({
           // title:res.data[0].title
         })
       },
-      fail: function (res) {
-        console.log(res);
-      },
-      complete: function (res) {
-        console.log(res);
-      }
     });
   },
   markertap:function(e){
@@ -123,13 +110,133 @@ Page({
     that.setData({ //设置markers属性，将搜索结果显示在地图中
       title: name
     })
-    fangjiatongDB.where({'name':name}).get({
+    fangjiatongDB.where({
+      'name': db.RegExp({
+        regexp: name.replace(/·/g,'').substr(0,3),
+        //从搜索栏中获取的value作为规则进行匹配。
+        options: 'i',
+        //大小写不区分
+      })}).get({
       success(res){
-        console.info(res)
+        var resMoney = '未找到，请查看周边'
+        if(res.data.length > 0){
+          resMoney = res.data[0].money + '元/㎡'
+        }
         that.setData({ //设置markers属性，将搜索结果显示在地图中
-          money: res.data[0].money,
+          money: resMoney
         })
       }
     })
+  },
+  xiaoQuNameInput:function(e){
+    this.setData({
+      xiaoQuName:e.detail.value
+    })
+  },
+  beginFind:function(e){
+    var that = this;
+    that.setData({
+      disabled:true,
+      loading:true
+    })
+    var name = that.data.xiaoQuName;
+    fangjiatongDB.where({
+      'name': db.RegExp({
+        regexp: name.replace(/·/g, '').substr(0, 3),
+        //从搜索栏中获取的value作为规则进行匹配。
+        options: 'i',
+        //大小写不区分
+      })
+    }).get({
+      success(res) {
+        var resMoney = '未找到，请查看周边'
+        if (res.data.length > 0) {
+          resMoney = res.data[0].money + '元/㎡'
+        }
+        that.setData({ //设置markers属性，将搜索结果显示在地图中
+          money: resMoney,
+          title: name,
+          disabled: false,
+          loading: false
+        })
+      }
+    })
+    that.beginFindLatitudeAndLongitude(name)
+  },
+  beginFindLatitudeAndLongitude(val) {
+    var _this = this;
+    //调用地址解析接口
+    qqmapsdk.geocoder({
+      //获取表单传入地址
+      address: val, //地址参数，例：固定地址，address: '北京市海淀区彩和坊路海淀西大街74号'
+      success: function (res) {//成功后的回调
+        console.info(1111111)
+        console.log(res);
+        var res = res.result;
+        var latitude = res.location.lat;
+        var longitude = res.location.lng;
+        //根据地址解析在地图上标记解析地址位置
+        // _this.setData({ // 获取返回结果，放到markers及poi中，并在地图展示
+        //   markers: [{
+        //     id: 0,
+        //     title: res.title,
+        //     latitude: latitude,
+        //     longitude: longitude,
+        //     iconPath: './resources/placeholder.png',//图标路径
+        //     width: 20,
+        //     height: 20,
+        //     callout: { //可根据需求是否展示经纬度
+        //       content: latitude + ',' + longitude,
+        //       color: '#000',
+        //       display: 'ALWAYS'
+        //     }
+        //   }],
+        //   poi: { //根据自己data数据设置相应的地图中心坐标变量名称
+        //     latitude: latitude,
+        //     longitude: longitude
+        //   }
+        // });
+      },
+      fail: function (error) {
+        console.error(error);
+      },
+      complete: function (res) {
+        console.log(res);
+      }
+    })
+  },
+  leftTimer:function (type,year, month, day, hour, minute, second) {
+    var that = this;
+    var leftTime = (new Date(year, month - 1, day, hour, minute, second)) - (new Date()); //计算剩余的毫秒数 
+    var days = parseInt(leftTime / 1000 / 60 / 60 / 24, 10); //计算剩余的天数 
+    var hours = parseInt(leftTime / 1000 / 60 / 60 % 24, 10); //计算剩余的小时 
+    var minutes = parseInt(leftTime / 1000 / 60 % 60, 10);//计算剩余的分钟 
+    var seconds = parseInt(leftTime / 1000 % 60, 10);//计算剩余的秒数 
+    switch (type) {
+      case 'days':
+        that.setData({ showVal: `${days}天${hours}小时${minutes}分${seconds}秒` })
+        break;
+      case 'hours':
+        that.setData({ showVal: `${days*24+hours}小时${minutes}分${seconds}秒` })
+        break;
+      case 'minutes':
+        that.setData({ showVal: `${(days * 24 + hours)*60+minutes}分${seconds}秒` })
+        break;
+      case 'seconds':
+        that.setData({ showVal: `${parseInt(leftTime/1000,10)}秒` })
+        break;
+      default:
+        that.setData({ showVal: `${days}天${hours}小时${minutes}分${seconds}秒` })
+        break;
+    }
+     
+  },
+  goday: function (e){
+    var that = this;
+    this.setData({
+      btnType: e.currentTarget.dataset.btntype
+    })
+    that.stopTimer()
+    that.startTimer(e.currentTarget.dataset.btntype)
   }
 })
