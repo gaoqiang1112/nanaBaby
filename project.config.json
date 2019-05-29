@@ -14,11 +14,13 @@
 	"compileType": "miniprogram",
 	"libVersion": "2.6.2",
 	"appid": "wx62a9dfb6cc9ec0b4",
-	"projectname": "miniprogram-test-1",
+	"projectname": "searchHouse",
 	"debugOptions": {
 		"hidedInDevtools": []
 	},
 	"isGameTourist": false,
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,
