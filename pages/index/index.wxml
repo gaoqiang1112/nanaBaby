@@ -1,13 +1,63 @@
 <!--index.wxml-->
-<view class="container">
-  <view class="userinfo">
-    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
-    <block wx:else>
-      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-    </block>
+<view class="index-container">
+  <view class='index-head'>
+    <view class='header-city'>
+      <text>哈尔滨</text> 
+      <view class='horn'></view>
+    </view>
+    <view class='header-details'>
+      <view class='detail'>新房</view>
+      <view class='detail'>二手房</view>
+      <view class='detail'>租房</view>
+    </view>
   </view>
-  <view class="usermotto">
-    <text class="user-motto">{{motto}}</text>
+  <view class='index-search'>
+    <view class='searchBox'>
+      <icon class='serachBox-icon'></icon>
+      <icon class='searchBox-line'></icon>
+      <text class='searchBox-text'>点击此处，查找房价</text>
+    </view>
+  </view>
+  <view class='index-navbar'>
+    <view class='navbar-item'>
+      <view class='nav-img xinFang'></view>
+      <text class='nav-text'>新房</text>
+    </view>
+    <!-- <navigator class='navbar-item'>
+      <view class='nav-img xinFang'></view>
+      <text class='nav-text'>二手房</text>
+    </navigator>
+    <navigator class='navbar-item'>
+      <view class='nav-img xinFang'></view>
+      <text class='nav-text'>租房</text>
+    </navigator>
+    <navigator class='navbar-item'>
+      <view class='nav-img xinFang'></view>
+      <text class='nav-text'>商铺写字楼</text>
+    </navigator>
+    <navigator class='navbar-item'>
+      <view class='nav-img xinFang'></view>
+      <text class='nav-text'>海外地产</text>
+    </navigator>
+    <navigator class='navbar-item'>
+      <view class='nav-img xinFang'></view>
+      <text class='nav-text'>查房价</text>
+    </navigator>
+    <navigator class='navbar-item'>
+      <view class='nav-img xinFang'></view>
+      <text class='nav-text'>找小区</text>
+    </navigator>
+    <navigator class='navbar-item'>
+      <view class='nav-img xinFang'></view>
+      <text class='nav-text'>免费看房</text>
+    </navigator>
+    <navigator class='navbar-item'>
+      <view class='nav-img xinFang'></view>
+      <text class='nav-text'>地图找房</text>
+    </navigator>
+    <navigator class='navbar-item'>
+      <view class='nav-img xinFang'></view>
+      <text class='nav-text'>找经纪人</text>
+    </navigator> -->
   </view>
 </view>
