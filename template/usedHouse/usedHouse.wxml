@@ -1,0 +1,46 @@
+<template name="usedHouse">
+  <view class='newHouse-list' wx:for="{{ 3 }}">
+    <view class='House-container'>
+      <view class='House-image'>
+        <image src='https://pic4.ajkimg.com/m/09f1d3e1adbc7f1ceee3d3da674601e4/275x206n.jpg'></image>
+        <view class='houseImg-icon'>
+          <icon class='icon-view'>quanjing</icon>
+          <icon class='icon-video'>haha</icon>
+        </view>
+      </view>
+      <view class='usedHouse-details'>
+        <view class='houseName text-ellipse'>万达商圈，万达华园，超高层两室，精装总价110万</view>
+        <view class='houseInfo'>
+          <text class='houseAddress'>医大四院江北分院 </text>
+          <text class='houseLine'></text>
+          <text class='houseArea'>万达华园|恒源街898号</text>
+        </view>
+        <view class='usedHouseTags'>
+          <view class='tags-anxuan'>
+            <text class='anxuan-head'>安选</text>
+            <text class='anxuan-tail'>真实在售</text>
+          </view>
+          <view class='tags-blue houseTag'>素质用户</view>
+          <view class='tags-blue houseTag'>繁华地段</view>
+          <view class='tags-blue houseTag'>低密度</view>
+        </view>
+        <view class='usedinfo'>
+          <view class='usedPrice'><text>110</text>万</view>
+          <view class='houseLine'></view>
+          <view class='houseDoor'>2室1厅</view>
+          <view class='houseLine'></view>
+          <view class='houseareaAll'>93㎡</view>
+        </view>
+        <view class='usedSeller'>
+          <view class='userSeller-img'>
+            <image src='http://pic1.ajkimg.com/display/29d659f4d3e4ff8c4eec27d010f6e99a/100x133.jpg'></image>
+          </view>
+          <text class='seller-name'>单玉良</text>
+          <text class='seller-score'>4.7分</text>
+          <text class='seller-company'>拓洋房地产</text>
+        </view>
+
+      </view>
+    </view>
+  </view>
+</template>

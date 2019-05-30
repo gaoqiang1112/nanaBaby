@@ -1,2 +1,3 @@
 /**app.wxss**/
 body{background: #FFF;}
+.text-ellipse{overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
