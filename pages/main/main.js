@@ -72,7 +72,7 @@ Page({
       location: latitude + ',' + longitude,  //设置周边搜索中心点
       success: function (res) { //搜索成功后的回调
         if (res.data.length>0){
-          that.setData({ 
+          that.setData({
             userNowCity: res.data[0].ad_info.city,
           })
         }
@@ -169,7 +169,7 @@ Page({
     //   disabled:true,
     //   loading:true
     // })
-    
+
     fangjiatongDB.where({
       'name': db.RegExp({
         regexp: that.data.userNowCity.replace(/市/g, ''),
@@ -179,7 +179,6 @@ Page({
       })
     }).get({
       success(res) {
-        console.info(res)
         const resultMsg = {
           cityName: that.data.userNowCity,
           xiaoQuName: name,
@@ -202,7 +201,6 @@ Page({
         that.setData({ //设置markers属性，将搜索结果显示在地图中
           resultMsg: resultMsg
         })
-        console.info(resultMsg)
         that.beginFindLatitudeAndLongitude(resultMsg.xiaoQuName)
       }
     })
@@ -215,13 +213,11 @@ Page({
     }else{
       address = _this.data.userNowCity + val
     }
-    console.info(address)
     //调用地址解析接口
     qqmapsdk.geocoder({
       //获取表单传入地址
       address: address, //地址参数，例：固定地址，address: '北京市海淀区彩和坊路海淀西大街74号'
       success: function (res) {//成功后的回调
-        console.info(res)
         _this.setData({
           latitude: res.result.location.lat,
           longitude: res.result.location.lng,
