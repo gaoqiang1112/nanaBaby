@@ -1,12 +1,11 @@
 {
   "pages": [
-    "pages/index/index",
     "pages/main/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "WeChat",
+    "navigationBarTitleText": "嗖房价",
     "navigationBarTextStyle": "black"
   },
   "permission": {

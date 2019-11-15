@@ -6,7 +6,7 @@ wx.cloud.init({
 const db = wx.cloud.database({
   env: 'fangjiatong-e6814a'
 })
-const fangjiatongDB = db.collection('name_money')
+const fangjiatongDB = db.collection('fangchacha')
 
 Page({
   data: {
@@ -16,11 +16,18 @@ Page({
     loading:false,
     disabled:false,
     xiaoQuName:'',
-    money:'请选择小区',
+    resultMsg:{
+      resMoney:'请选择小区',
+      trend:'--',
+      cityName:'请选择小区',
+      xiaoQuName:'请选择小区'
+    },
+    money:'',
     markers: [],
     btnType:'days',
     showVal:'',
-    myTimer:null
+    myTimer:null,
+    userNowCity:''
   },
   onReady: function () {
     // 实例化API核心类
@@ -28,20 +35,7 @@ Page({
       key: 'I26BZ-CKIK4-PU7UI-XH2BC-HQTXE-5RFNQ' // 必填
     });
     this.getLocation()
-    this.startTimer('days')
-  },
-  startTimer(t){
-    var that = this;
-    // 时间倒计时
-    var timer = setInterval(function () {
-      that.leftTimer(t,2019, 5, 1, 9, 30, 0)
-    }, 1000);
-    that.setData({
-      myTimer: timer
-    })
-  },
-  stopTimer(){
-    clearInterval(this.data.myTimer);
+    // this.startTimer('days')
   },
   regionchange(e) {
     e.type == 'end' ? this.getLngLat() : '';
@@ -77,7 +71,13 @@ Page({
       page_size:10,
       location: latitude + ',' + longitude,  //设置周边搜索中心点
       success: function (res) { //搜索成功后的回调
+        if (res.data.length>0){
+          that.setData({ 
+            userNowCity: res.data[0].ad_info.city,
+          })
+        }
         var mks = []
+        var needInfo = []
         for (var i = 0; i < res.data.length; i++) {
           mks.push({ // 获取返回结果，放到mks数组中
             title: res.data[i].title,
@@ -87,7 +87,7 @@ Page({
             iconPath: "/img/tt.png", //图标路径
             width: 20,
             height: 20,
-          
+            ad_info: res.data[i].ad_info
           })
         }
         that.setData({ //设置markers属性，将搜索结果显示在地图中
@@ -98,32 +98,50 @@ Page({
     });
   },
   markertap:function(e){
+    wx.showLoading({
+      title: '加载中',
+    })
     var that = this;
     var markerId = e.markerId
     var name = ''
+    var ad_info = {}
     e.target.dataset.id.map(function(n){
       if(n.id == markerId){
         name = n.title
+        ad_info = n.ad_info
         return;
       }
     })
-    that.setData({ //设置markers属性，将搜索结果显示在地图中
-      title: name
-    })
     fangjiatongDB.where({
       'name': db.RegExp({
-        regexp: name.replace(/·/g,'').substr(0,3),
+        regexp: ad_info.city.replace(/市/g, ''),
         //从搜索栏中获取的value作为规则进行匹配。
         options: 'i',
         //大小写不区分
-      })}).get({
-      success(res){
-        var resMoney = '未找到，请查看周边'
-        if(res.data.length > 0){
-          resMoney = res.data[0].money + '元/㎡'
+      })
+    }).get({
+      success(res) {
+        const resultMsg = {
+          cityName: ad_info.city,
+          xiaoQuName: name,
+          resMoney: '未找到，请查看周边',
+          trend: '--'
         }
+        if (res.data.length > 0) {
+          const cityList = res.data[0].data
+          const targetName = name.replace(/·/g, '').substr(0, 3)
+
+          for (var i = 0; i < cityList.length; i++) {
+            if (cityList[i].name.indexOf(targetName) > -1) {
+              resultMsg.resMoney = cityList[i].money + '元/㎡'
+              resultMsg.trend = cityList[i].trend
+              break
+            }
+          }
+        }
+        wx.hideLoading()
         that.setData({ //设置markers属性，将搜索结果显示在地图中
-          money: resMoney
+          resultMsg: resultMsg
         })
       }
     })
@@ -135,46 +153,79 @@ Page({
   },
   beginFind:function(e){
     var that = this;
-    that.setData({
-      disabled:true,
-      loading:true
-    })
     var name = that.data.xiaoQuName;
+    if (name == ''){
+      wx.showToast({
+        title: '请输入小区名',
+        icon: 'none',
+        duration: 1500
+      })
+      return
+    }
+    wx.showLoading({
+      title: '加载中',
+    })
+    // that.setData({
+    //   disabled:true,
+    //   loading:true
+    // })
+    
     fangjiatongDB.where({
       'name': db.RegExp({
-        regexp: name.replace(/·/g, '').substr(0, 3),
+        regexp: that.data.userNowCity.replace(/市/g, ''),
         //从搜索栏中获取的value作为规则进行匹配。
         options: 'i',
         //大小写不区分
       })
     }).get({
       success(res) {
-        var resMoney = '未找到，请查看周边'
+        console.info(res)
+        const resultMsg = {
+          cityName: that.data.userNowCity,
+          xiaoQuName: name,
+          resMoney: '未找到，请查看周边',
+          trend: '--'
+        }
         if (res.data.length > 0) {
-          resMoney = res.data[0].money + '元/㎡'
+          const cityList = res.data[0].data
+          const targetName = name.replace(/·/g, '').substr(0, 3)
+
+          for (var i = 0; i < cityList.length; i++) {
+            if (cityList[i].name.indexOf(targetName) > -1) {
+              resultMsg.resMoney = cityList[i].money + '元/㎡'
+              resultMsg.trend = cityList[i].trend
+              resultMsg.xiaoQuName = cityList[i].name
+              break
+            }
+          }
         }
         that.setData({ //设置markers属性，将搜索结果显示在地图中
-          money: resMoney,
-          title: name,
-          disabled: false,
-          loading: false
+          resultMsg: resultMsg
         })
+        console.info(resultMsg)
+        that.beginFindLatitudeAndLongitude(resultMsg.xiaoQuName)
       }
     })
-    that.beginFindLatitudeAndLongitude(name)
   },
   beginFindLatitudeAndLongitude(val) {
     var _this = this;
+    var address = '';
+    if (val.indexOf('省') > -1 || val.indexOf('市') > -1 || val.indexOf('区') > -1){
+      address = val
+    }else{
+      address = _this.data.userNowCity + val
+    }
+    console.info(address)
     //调用地址解析接口
     qqmapsdk.geocoder({
       //获取表单传入地址
-      address: val, //地址参数，例：固定地址，address: '北京市海淀区彩和坊路海淀西大街74号'
+      address: address, //地址参数，例：固定地址，address: '北京市海淀区彩和坊路海淀西大街74号'
       success: function (res) {//成功后的回调
-        console.info(1111111)
-        console.log(res);
-        var res = res.result;
-        var latitude = res.location.lat;
-        var longitude = res.location.lng;
+        console.info(res)
+        _this.setData({
+          latitude: res.result.location.lat,
+          longitude: res.result.location.lng,
+        })
         //根据地址解析在地图上标记解析地址位置
         // _this.setData({ // 获取返回结果，放到markers及poi中，并在地图展示
         //   markers: [{
@@ -182,7 +233,7 @@ Page({
         //     title: res.title,
         //     latitude: latitude,
         //     longitude: longitude,
-        //     iconPath: './resources/placeholder.png',//图标路径
+        //     iconPath: '/img/tt.png',//图标路径
         //     width: 20,
         //     height: 20,
         //     callout: { //可根据需求是否展示经纬度
@@ -196,22 +247,52 @@ Page({
         //     longitude: longitude
         //   }
         // });
+        // _this.setData({
+        //   disabled: false,
+        //   loading: false
+        // })
       },
       fail: function (error) {
         console.error(error);
       },
       complete: function (res) {
         console.log(res);
+        wx.hideLoading()
       }
     })
   },
+  resetCity(){
+    this.getLocation()
+    this.setData({
+      resultMsg: {
+        resMoney: '请选择小区',
+        trend: '--',
+        cityName: '请选择小区',
+        xiaoQuName: '请选择小区'
+      },
+      xiaoQuName:''
+    })
+  },
+  startTimer(t) {
+    var that = this;
+    // 时间倒计时
+    var timer = setInterval(function () {
+      that.leftTimer(t, 2019, 5, 1, 9, 30, 0)
+    }, 1000);
+    that.setData({
+      myTimer: timer
+    })
+  },
+  stopTimer() {
+    clearInterval(this.data.myTimer);
+  },
   leftTimer:function (type,year, month, day, hour, minute, second) {
     var that = this;
-    var leftTime = (new Date(year, month - 1, day, hour, minute, second)) - (new Date()); //计算剩余的毫秒数 
-    var days = parseInt(leftTime / 1000 / 60 / 60 / 24, 10); //计算剩余的天数 
-    var hours = parseInt(leftTime / 1000 / 60 / 60 % 24, 10); //计算剩余的小时 
-    var minutes = parseInt(leftTime / 1000 / 60 % 60, 10);//计算剩余的分钟 
-    var seconds = parseInt(leftTime / 1000 % 60, 10);//计算剩余的秒数 
+    var leftTime = (new Date(year, month - 1, day, hour, minute, second)) - (new Date()); //计算剩余的毫秒数
+    var days = parseInt(leftTime / 1000 / 60 / 60 / 24, 10); //计算剩余的天数
+    var hours = parseInt(leftTime / 1000 / 60 / 60 % 24, 10); //计算剩余的小时
+    var minutes = parseInt(leftTime / 1000 / 60 % 60, 10);//计算剩余的分钟
+    var seconds = parseInt(leftTime / 1000 % 60, 10);//计算剩余的秒数
     switch (type) {
       case 'days':
         that.setData({ showVal: `${days}天${hours}小时${minutes}分${seconds}秒` })
@@ -229,7 +310,7 @@ Page({
         that.setData({ showVal: `${days}天${hours}小时${minutes}分${seconds}秒` })
         break;
     }
-     
+
   },
   goday: function (e){
     var that = this;

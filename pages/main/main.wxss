@@ -7,11 +7,12 @@
   height:30px;
 }
 .bottom_text{
-  margin-top: 20px
+  margin-top: 10px
 }
 .text_head{
   display: flex;
-  justify-content: space-around
+  padding: 0 15px;
+  justify-content: space-between
 }
 .top{
     margin-top:10px;
@@ -19,19 +20,28 @@
 .inputView{
     border: 2rpx solid gainsboro;
     border-radius: 40rpx;
-    height: 80rpx;
+    height: 45px;
+    width: 55%;
+}
+.toastInfo{
+  color: red;
+  font-size: 10px;
 }
 input{
     margin-left: 25rpx;
     margin-right: 25rpx;
-    height: 80rpx;
+    height: 45px;
+}
+.p15{
+  padding: 0 15px;
+  margin-bottom: -10px;
 }
 .ph{
     color: gainsboro;
     font-size: 0.875em;
 }
 .bootom-btn{
-  display:flex;algin-item:center;margin-top:10px
+  display:flex;margin-top:10px;padding: 0 15px;justify-content: space-between;
 }
 .bottomtext{
   margin-top: 10px;
@@ -44,4 +54,11 @@ input{
   display: flex;
   justify-content: flex-start;
   margin-top:10px
+}
+.guangGao{
+  margin-top: 15px;
+  min-height: 80px;
+}
+.text_r{
+  text-align: right
 }

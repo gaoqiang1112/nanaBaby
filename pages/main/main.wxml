@@ -1,44 +1,67 @@
-<map
-  id="map"
-  longitude="{{longitude}}"
-  latitude="{{latitude}}"
-  markers="{{markers}}"
-  bindregionchange="regionchange"
-  scale="14"
-  show-location
-  style="width: 100%; height: 300px;"
-  bindmarkertap='markertap'
-  data-id="{{markers}}"
->
-<cover-image class="cover-image"  bindtap="my_location" src="/img/tt.png" />
-</map>
-<view class='bottom_text'>
-  <view class='text_head'>
-    <view>小区名称</view>
-    <view wx:if="{{title == ''}}">【请选择小区】</view>
-    <view wx:else>【{{title}}】</view>
-  </view>
-  <view class='text_head'>
-    <view>房价</view>
-    <view>【{{money}}】</view>
-  </view>
-  <view class="top bootom-btn" style=''>
-    <view class="inputView">
-        <input type="text" placeholder="请输入小区名" value="{{xiaoQuName}}" placeholder-class="ph" bindinput="xiaoQuNameInput"/>
+<view >
+    <map
+      id="map"
+      longitude="{{longitude}}"
+      latitude="{{latitude}}"
+      markers="{{markers}}"
+      bindregionchange="regionchange"
+      scale="14"
+      show-location
+      style="width: 100%; height: 300px;"
+      bindmarkertap='markertap'
+      data-id="{{markers}}"
+      data-needInfo="{{needInfo}}"
+    >
+      <cover-image class="cover-image"  bindtap="my_location" src="/img/tt.png" />
+    </map>
+    <view class='bottom_text'>
+      <view class='text_head'>
+        <view>市区</view>
+        <view>【{{resultMsg.cityName}}】</view>
+      </view>
+      <view class='text_head'>
+        <view>小区名称</view>
+        <view>【{{resultMsg.xiaoQuName}}】</view>
+      </view>
+      <view class='text_head'>
+        <view>房价</view>
+        <view>【{{resultMsg.resMoney}}】</view>
+      </view>
+      <view class='text_head'>
+        <view>趋势</view>
+        <view>【{{resultMsg.trend}}】</view>
+      </view>
+      <view class="top bootom-btn" >
+        <view class="inputView">
+            <input type="text" placeholder="请输入小区全名" value="{{xiaoQuName}}" placeholder-class="ph"       bindinput="xiaoQuNameInput"/>
+        </view>
+        <button style="height:45px" type="primary" bindtap="beginFind"  loading="{{loading}}" disabled="{{disabled}}">查询</button>
+        <button style="height:45px" type="warn" bindtap="resetCity">重置</button>
+      </view>
+      <view class="p15">
+        <text class="toastInfo">* 默认搜索当前所在城市小区</text>
+      </view>
+      <view class="p15">
+        <text class="toastInfo">* 为提高准确度，请至少输入小区前3个正确文字</text>
+      </view>
+      <view class="p15">
+        <text class="toastInfo">* 如想查看其他市区请输入带有[省][市][区]的详细地址</text>
+      </view>
+      <!-- <view class="daybtns" >
+        离和娜娜见面还有 
+        <button type="{{btnType=='days'?'primary':'default'}}" size='mini' data-btnType='days' bindtap="goday">天</button>
+        <button type="{{btnType=='hours'?'primary':'default'}}" size='mini' data-btnType='hours' bindtap="goday">时</button>
+        <button type="{{btnType=='minutes'?'primary':'default'}}" size='mini' data-btnType='minutes' bindtap="goday">分</button>
+        <button type="{{btnType=='seconds'?'primary':'default'}}" size='mini' data-btnType='seconds' bindtap="goday">秒</button>
+      </view>
+      <view class='bottomtext' >
+        
+        <view> {{showVal}} </view>
+      </view> -->
     </view>
-    <button  type="primary" bindtap="beginFind"  loading="{{loading}}" disabled="{{disabled}}">查询</button>
-  </view>
-  <view class="daybtns" >
-    离和娜娜见面还有 
-    <button type="{{btnType=='days'?'primary':'default'}}" size='mini' data-btnType='days' bindtap="goday">天</button>
-    <button type="{{btnType=='hours'?'primary':'default'}}" size='mini' data-btnType='hours' bindtap="goday">时</button>
-    <button type="{{btnType=='minutes'?'primary':'default'}}" size='mini' data-btnType='minutes' bindtap="goday">分</button>
-    <button type="{{btnType=='seconds'?'primary':'default'}}" size='mini' data-btnType='seconds' bindtap="goday">秒</button>
-  </view>
-  <view class='bottomtext' >
-    
-    <view> {{showVal}} </view>
-  </view>
-
-  
+    <view class='guangGao' style="background: url('https://ydxffq.oss-cn-hangzhou.aliyuncs.com/ydxffqtest/h5/consumStageLoan/test210/dist_110801/img/tttt.jpg') no-repeat;background-size:cover;background-position: bottom;position: absolute;bottom:0;width:100%;">
+          <view class="text_r">【广告位招商】</view>
+          <view class="text_r">wx:【185559129】</view>
+    </view>
 </view>
+
