@@ -27,7 +27,13 @@ Page({
     btnType:'days',
     showVal:'',
     myTimer:null,
-    userNowCity:''
+    userNowCity:'',
+    adInfo: [],
+    indicatorDots: false,
+    vertical: false,
+    autoplay: true,
+    interval: 3000,
+    duration: 500
   },
   onReady: function () {
     // 实例化API核心类
@@ -39,6 +45,39 @@ Page({
   },
   regionchange(e) {
     e.type == 'end' ? this.getLngLat() : '';
+  },
+  // 获取广告位信息
+  getAdInfo(cityName){
+    const that = this
+    fangjiatongDB.where({
+      'name': db.RegExp({
+        regexp: cityName.replace(/市/g, ''),
+        //从搜索栏中获取的value作为规则进行匹配。
+        options: 'i',
+        //大小写不区分
+      })
+    }).get({
+      success(res) {
+        const adInfo = res.data[0].ad || []
+        let swiperFlag = false
+        if (adInfo.length>1){
+          swiperFlag = true
+        }
+        that.setData({
+          adInfo:adInfo,
+          indicatorDots:swiperFlag
+        })
+      }
+    })
+  },
+  // 广告位拨打电话
+  telPhone(e){
+    const telNum = e.target.dataset.telnum
+    if (telNum!=void 0){
+      wx.makePhoneCall({
+        phoneNumber: e.target.dataset.telnum
+      })
+    }
   },
   getLngLat() {
     let that = this;
@@ -75,6 +114,7 @@ Page({
           that.setData({
             userNowCity: res.data[0].ad_info.city,
           })
+          that.getAdInfo(res.data[0].ad_info.city)
         }
         var mks = []
         var needInfo = []

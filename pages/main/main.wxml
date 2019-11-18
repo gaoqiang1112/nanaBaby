@@ -1,4 +1,17 @@
 <view >
+    <view wx:if="{{adInfo.length > 0}}" class="page-section page-section-spacing swiper">
+      <swiper indicator-dots="{{indicatorDots}}" circular="true"
+        autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" style="height:50px!important">
+        <block wx:for="{{adInfo}}" wx:key="*this">
+          <swiper-item>
+            <view class="swiper-item" style="font-size:15px;padding:0 15px;background:url('https://ydxffq.oss-cn-hangzhou.aliyuncs.com/ydxffqtest/h5/consumStageLoan/test210/dist_110801/img/ttt.png') no-repeat;background-size:cover;background-position: top;width:100%;height:100%" bindtap="telPhone" data-telNum="{{item.phone}}">
+              {{userNowCity}}买房,首选 {{item.name}}
+              <view>电话: {{item.phone}}, 快快点击咨询吧</view>
+            </view>
+          </swiper-item>
+        </block>
+      </swiper>
+    </view>
     <map
       id="map"
       longitude="{{longitude}}"
@@ -48,20 +61,22 @@
         <text class="toastInfo">* 如想查看其他市区请输入带有[省][市][区]的详细地址</text>
       </view>
       <!-- <view class="daybtns" >
-        离和娜娜见面还有 
+        离和娜娜见面还有
         <button type="{{btnType=='days'?'primary':'default'}}" size='mini' data-btnType='days' bindtap="goday">天</button>
         <button type="{{btnType=='hours'?'primary':'default'}}" size='mini' data-btnType='hours' bindtap="goday">时</button>
         <button type="{{btnType=='minutes'?'primary':'default'}}" size='mini' data-btnType='minutes' bindtap="goday">分</button>
         <button type="{{btnType=='seconds'?'primary':'default'}}" size='mini' data-btnType='seconds' bindtap="goday">秒</button>
       </view>
       <view class='bottomtext' >
-        
+
         <view> {{showVal}} </view>
       </view> -->
     </view>
-    <view class='guangGao' style="background: url('https://ydxffq.oss-cn-hangzhou.aliyuncs.com/ydxffqtest/h5/consumStageLoan/test210/dist_110801/img/tttt.jpg') no-repeat;background-size:cover;background-position: bottom;position: absolute;bottom:0;width:100%;">
+    <view class='guangGao' style="background: url('https://ydxffq.oss-cn-hangzhou.aliyuncs.com/ydxffqtest/h5/consumStageLoan/test210/dist_110801/img/tttt.jpg') no-repeat;background-size:cover;background-position: bottom;width:100%;">
           <view class="text_r">【广告位招商】</view>
           <view class="text_r">wx:【185559129】</view>
     </view>
+
+
 </view>
 
